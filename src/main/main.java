@@ -10,9 +10,9 @@ public class main {
 
 
         UserRepository userRepository = new UserRepository();
-        //userRepository.insert(User.builder().nom("DIOP").prenom("DANE").age(18).build());
+        userRepository.insert(User.builder().nom("DIOP").prenom("DANE").age(18).build());
 
-        userRepository.getAll().forEach(a -> System.out.println(a));
+        //userRepository.getAll().forEach(a -> System.out.println(a));
 
 
 

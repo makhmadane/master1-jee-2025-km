@@ -36,8 +36,17 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
-    public void delete(int id) {
-
+    public boolean delete(int id) {
+        Db db = new Db();
+        String sql ="DELETE from \"user\" where id = ? ";
+        try {
+            PreparedStatement preparedStatement = db.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1,id);
+            preparedStatement.executeUpdate();
+            return true ;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
