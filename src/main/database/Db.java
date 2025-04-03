@@ -10,18 +10,20 @@ public class Db {
     private String user = "postgres";
     private String password = "passer";
 
-
+    private static Connection connection = null ;
     public Connection getConnection(){
-        Connection connection = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url,user,password);
-            System.out.println("SUCCESS");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("FAILED");
-            throw new RuntimeException(e);
+        //Design Pattern Singleton
+        if(connection == null){
+            try {
+                Class.forName("org.postgresql.Driver");
+                connection = DriverManager.getConnection(url,user,password);
+                System.out.println("SUCCESS");
+            } catch (ClassNotFoundException | SQLException e) {
+                System.out.println("FAILED");
+                throw new RuntimeException(e);
+            }
         }
+
         return  connection;
     }
 }

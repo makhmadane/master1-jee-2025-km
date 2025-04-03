@@ -2,6 +2,7 @@ package src.main.web;
 
 
 import src.main.dao.UserRepository;
+import src.main.entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,7 +24,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action =  req.getParameter("action") == null ? "list" : req.getParameter("action") ;
-
+        RequestDispatcher dispatcher ;
         switch (action){
             case "delete":
                  int id = Integer.parseInt(req.getParameter("id"));
@@ -31,14 +32,24 @@ public class UserServlet extends HttpServlet {
                  resp.sendRedirect("?action=list");
                 break;
             case "add":
+                dispatcher = req.getRequestDispatcher("views/add.jsp");
+                dispatcher.forward(req,resp);
+                break;
+            case "save":
+
                 break;
             case "edit":
+                int idEdit = Integer.parseInt(req.getParameter("id"));
+                User user = userRepository.getById(idEdit);
+                req.setAttribute("user",user);
+                dispatcher = req.getRequestDispatcher("views/edit.jsp");
+                dispatcher.forward(req,resp);
                 break;
             case "update":
                 break;
             default:
                 req.setAttribute("listUser", userRepository.getAll());
-                RequestDispatcher dispatcher = req.getRequestDispatcher("views/list.jsp"); //
+                dispatcher = req.getRequestDispatcher("views/list.jsp"); //
                 dispatcher.forward(req,resp);
         }
 
@@ -47,7 +58,31 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        String action = req.getParameter("action");
+        User user;
+        RequestDispatcher dispatcher;
+        switch (action) {
+            case "save":
+                user = User.builder()
+                        .prenom(req.getParameter("prenom"))
+                        .nom(req.getParameter("nom"))
+                        .age(Integer.parseInt(req.getParameter("age")))
+                        .build();
+                userRepository.insert(user);
+                resp.sendRedirect("?action=list");
+                break;
+            case "update":
+                 user = User.builder()
+                        .id(Integer.parseInt(req.getParameter("id")))
+                        .prenom(req.getParameter("prenom"))
+                        .nom(req.getParameter("nom"))
+                        .age(Integer.parseInt(req.getParameter("age")))
+                        .build();
+                 userRepository.update(user);
+                resp.sendRedirect("?action=list");
+                break;
+        }
+
     }
 
 
