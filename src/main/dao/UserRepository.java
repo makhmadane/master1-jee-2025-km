@@ -1,7 +1,7 @@
-package src.main.dao;
+package dao;
 
-import src.main.database.Db;
-import src.main.entity.User;
+import database.Db;
+import entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

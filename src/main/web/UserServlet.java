@@ -1,8 +1,7 @@
-package src.main.web;
+package web;
 
-
-import src.main.dao.UserRepository;
-import src.main.entity.User;
+import dao.UserRepository;
+import entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

@@ -1,4 +1,4 @@
-package src.main.entity;
+package entity;
 
 import lombok.*;
 import javax.validation.constraints.*;
