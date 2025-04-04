@@ -1,7 +1,9 @@
-package web;
+package src.main.web;
 
-import dao.UserRepository;
-import entity.User;
+import src.main.dao.RoleRepository;
+import src.main.dao.UserRepository;
+import src.main.entity.Role;
+import src.main.entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,14 +12,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
 
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     @Override
     public void init() throws ServletException {
         this.userRepository =  new UserRepository();
+        this.roleRepository = new RoleRepository();
     }
 
     @Override
@@ -31,11 +36,10 @@ public class UserServlet extends HttpServlet {
                  resp.sendRedirect("?action=list");
                 break;
             case "add":
+                List<Role> roles = roleRepository.getAll();
+                req.setAttribute("roles",roles);
                 dispatcher = req.getRequestDispatcher("views/add.jsp");
                 dispatcher.forward(req,resp);
-                break;
-            case "save":
-
                 break;
             case "edit":
                 int idEdit = Integer.parseInt(req.getParameter("id"));
@@ -66,6 +70,7 @@ public class UserServlet extends HttpServlet {
                         .prenom(req.getParameter("prenom"))
                         .nom(req.getParameter("nom"))
                         .age(Integer.parseInt(req.getParameter("age")))
+                        .role(roleRepository.getById(Integer.parseInt(req.getParameter("role"))))
                         .build();
                 userRepository.insert(user);
                 resp.sendRedirect("?action=list");
