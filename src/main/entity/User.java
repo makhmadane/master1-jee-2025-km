@@ -1,26 +1,32 @@
 package src.main.entity;
 
 import lombok.*;
-import javax.validation.constraints.*;
-
+import javax.persistence.*;
 @Data
 @Builder
-
-
-
-/*@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor*/
-
-
+@AllArgsConstructor
+@Entity
+@Table(name = "utilisateur")
 public class User {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private int id;
-    @NonNull
+
+    @Column(name = "name")
     private String nom;
-    @NonNull
+
     private String prenom;
+
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    public User() {
+    }
+
+
 
 }
